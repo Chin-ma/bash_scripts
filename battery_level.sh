@@ -1,16 +1,16 @@
 
-cat /sys/class/power_supply/BAT0/capacity
+cat /sys/class/power_supply/BAT1/capacity
 # if(cat /sys/class/power_supply/BAT0/capacity <= 87)
-battery_percentage=$(cat /sys/class/power_supply/BAT0/capacity)
+battery_percentage=$(cat /sys/class/power_supply/BAT1/capacity)
 battery_status=$(acpi -b | grep -oP '(?<=: ).*?(?=,)')
-if [[ battery_percentage -le 5 && "$battery_status" == "Discharging" ]]; then
+if ( "$battery_percentage" -le 60 && "$battery_status" == "Discharging" ); then
     # Send a notification
     notify-send "battery super low, plug in if you don't want your laptop to shut off dumbass"
 fi
 message1="script run at $(date)"
 message2="battery status $(acpi -b | grep -oP '(?<=: ).*?(?=,)' )"
-echo $message2 >> ~/code_repo/bash_scripts/logs/battery_logs.log
-echo $message1 >> ~/code_repo/bash_scripts/logs/battery_logs.log
+echo $message2 >> ~/Documents/bash_scripts/logs/battery_logs.log
+echo $message1 >> ~/Documents/bash_scripts/logs/battery_logs.log
 
 # battery_info=$(acpi -b)
 # battery_percentage=$(echo "$battery_info" | grep -oP '\d+(?=%)')
